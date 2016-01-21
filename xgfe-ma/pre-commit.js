@@ -4,12 +4,11 @@ var spawnSync = child_process.spawnSync;
 var fs = require('fs');
 var path = require('path');
 
-var DIFF_COMMAND = 'git diff --name-status';
+var DIFF_COMMAND = 'git diff-index --name-only HEAD';
 
 var files, file,
     root = process.cwd(),
     file_path,
-    sub_path,status,
     htmlFiles = [],
     jsFiles = [],
     isLibFileReg = /^src\/lib\/.*/i,
@@ -17,8 +16,14 @@ var files, file,
     isJSReg = /^src\/.*\.js$/i,
     isMinJSReg = /\.min\.js$/i;
 
-
-files = execSync(DIFF_COMMAND).toString().split('\n');
+try{
+  files = execSync(DIFF_COMMAND).toString().split('\n');
+  next(0);
+}catch(e){
+  htmlFiles = ['.'];
+  jsFiles = ['.'];
+  doLint();
+}
 
 function next(i) {
     if (i >= files.length) {
@@ -30,26 +35,21 @@ function next(i) {
         next(++i);
         return;
     }
-    sub_path = file.slice(1).trim();
-    status = file.slice(0,1);
-    file_path = path.resolve(root, sub_path);
-    if(sub_path.match(isLibFileReg)){
-        if(!status || status === 'A' || status === 'C'){ //允许在lib中增加,复制，但是不允许修改或者删除，需要询问确认
-            return next(++i);
-        }
-        console.log('[ERROR] You cannot modified/deleted/renamed any file in lib directory！！');
+    file_path = path.resolve(root, file);
+    if(file.match(isLibFileReg)){
+        console.log('[ERROR] You cannot operate any file in lib directory！！');
         quit(1);
     }else if(fs.existsSync(file_path)){//进行其他校验，如eslint，htmlhint等。
-        if(sub_path.match(isHTMLReg)){
+        if(file.match(isHTMLReg)){
             htmlFiles.push(file_path);
         }
-        if(sub_path.match(isJSReg) && !sub_path.match(isMinJSReg)){
+        if(file.match(isJSReg) && !file.match(isMinJSReg)){
             jsFiles.push(file_path);
         }
         next(++i);
     }
 };
-next(0);
+
 function doLint(){
     var xhtmlhint_bin = 'xhtmlhint',
         eslint_bin = 'eslint',
