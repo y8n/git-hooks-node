@@ -1,0 +1,23 @@
+{
+  "name": "ghooks",
+  "version": "0.0.1",
+  "description": "create git hook by Node.JS",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.sankuai.com/~yangjiyuan/ghooks.git"
+  },
+  "keywords": [
+    "githooks"
+  ],
+  "author": "YangJiyuan",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^6.0.4",
+    "map-stream": "0.0.6",
+    "uglify-js": "^2.6.1",
+    "vinyl-fs": "^2.3.1"
+  }
+}
