@@ -16,13 +16,13 @@ var files, file,
     isJSReg = /^src\/.*\.js$/i,
     isMinJSReg = /\.min\.js$/i;
 
-try{
-  files = execSync(DIFF_COMMAND).toString().split('\n');
-  next(0);
-}catch(e){
-  htmlFiles = ['.'];
-  jsFiles = ['.'];
-  doLint();
+try {
+    files = execSync(DIFF_COMMAND).toString().split('\n');
+    next(0);
+} catch (e) {
+    htmlFiles = ['.'];
+    jsFiles = ['.'];
+    doLint();
 }
 
 function next(i) {
@@ -31,26 +31,26 @@ function next(i) {
         return;
     }
     file = files[i];
-    if(!file){
+    if (!file) {
         next(++i);
         return;
     }
     file_path = path.resolve(root, file);
-    if(file.match(isLibFileReg)){
+    if (file.match(isLibFileReg)) {
         console.log('[ERROR] You cannot operate any file in lib directory！！');
         quit(1);
-    }else if(fs.existsSync(file_path)){//进行其他校验，如eslint，htmlhint等。
-        if(file.match(isHTMLReg)){
+    } else if (fs.existsSync(file_path)) {//进行其他校验，如eslint，htmlhint等。
+        if (file.match(isHTMLReg)) {
             htmlFiles.push(file_path);
         }
-        if(file.match(isJSReg) && !file.match(isMinJSReg)){
+        if (file.match(isJSReg) && !file.match(isMinJSReg)) {
             jsFiles.push(file_path);
         }
         next(++i);
     }
-};
+}
 
-function doLint(){
+function doLint() {
     var xhtmlhint_bin = 'xhtmlhint',
         eslint_bin = 'eslint',
         result,

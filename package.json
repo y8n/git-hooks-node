@@ -1,23 +1,28 @@
 {
-  "name": "ghooks",
-  "version": "0.0.1",
-  "description": "create git hook by Node.JS",
+  "name": "git-hooks-node",
+  "version": "0.1.0",
+  "description": "create git-hooks by Node.JS automatically",
+  "main": "build.js",
+  "dependencies": {
+    "map-stream": "^0.0.6",
+    "vinyl-fs": "^2.3.1"
+  },
   "scripts": {
     "build": "node build.js"
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@git.sankuai.com/~yangjiyuan/ghooks.git"
+    "url": "git+https://github.com/y8n/git-hooks-node.git"
   },
   "keywords": [
-    "githooks"
+    "git",
+    "hooks",
+    "Node.JS"
   ],
   "author": "YangJiyuan",
   "license": "MIT",
-  "dependencies": {
-    "glob": "^6.0.4",
-    "map-stream": "0.0.6",
-    "uglify-js": "^2.6.1",
-    "vinyl-fs": "^2.3.1"
-  }
+  "bugs": {
+    "url": "https://github.com/y8n/git-hooks-node/issues"
+  },
+  "homepage": "https://github.com/y8n/git-hooks-node#readme"
 }
