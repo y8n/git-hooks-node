@@ -32,6 +32,6 @@ function getFileName(path) {
     }
     return '';
 }
-vfs.src(['**/*.js', '!node_modules/**/*', '!build.js', '!template.js', '!**/*.installer.js'])
+vfs.src(['**/*.js', '!node_modules/**/*', '!build.js', '!template.js','!lib/*.js', '!**/*.installer.js'])
     .pipe(map(build))
     .pipe(vfs.dest('.'));
