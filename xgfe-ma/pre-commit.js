@@ -4,6 +4,9 @@ var spawnSync = child_process.spawnSync;
 var path = require('path');
 
 var files = getDiffFiles();
+if(!files.length){
+    quit();
+}
 var libFiles = files.filter(function (file) {
     return isLibFiles(file.subpath) && ~['d','m','c','r'].indexOf(file.status);
 });
