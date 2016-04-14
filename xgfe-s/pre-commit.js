@@ -28,6 +28,9 @@ var lintFiles = files.filter(function (file) {
 }).map(function (file) {
     return file.subpath;
 });
+if(!lintFiles.length){
+    quit();
+}
 var argv = ['lint'];
 argv = argv.concat(lintFiles);
 argv = argv.concat(['-c','src/.lintrc']);
