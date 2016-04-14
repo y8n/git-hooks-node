@@ -23,7 +23,8 @@ if(libFiles.length){
 var lintFiles = files.filter(function (file) {
     return !isLibFiles(file.subpath)
         && !isDistFiles(file.subpath)
-        && ~['a','m','c','r'].indexOf(file.status);
+        && ~['a','m','c','r'].indexOf(file.status)
+        && !isXChartsFiles(file.subpath);
 }).map(function (file) {
     return file.subpath;
 });
@@ -79,6 +80,12 @@ function getDiffFiles(type) {
 function isLibFiles(subpath){
     return subpath.match(/^src\/lib\/.*/i)
         && !subpath.match(/^src\/lib\/xCharts\/.*/i);
+}
+/**
+ * 是否是xCharts目录下的文件
+ */
+function isXChartsFiles(subpath) {
+    return subpath.match(/^src\/lib\/xCharts\/.*/i);
 }
 /**
  * 是否是dist目录下的文件
