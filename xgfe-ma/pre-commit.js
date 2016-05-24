@@ -4,42 +4,36 @@ var spawnSync = child_process.spawnSync;
 var path = require('path');
 
 var files = getDiffFiles();
-if(!files.length){
+if (!files.length) {
     quit();
 }
 var libFiles = files.filter(function (file) {
-    return isLibFiles(file.subpath) && ~['d','m','c','r'].indexOf(file.status);
+    return isLibFiles(file.subpath) && ~['d', 'm', 'c', 'r'].indexOf(file.status);
 });
-if(libFiles.length){
+if (libFiles.length) {
     console.log('[WARNING] You cannot delete/modify/copy/rename any file in lib directory！！\n' +
         'Listed below are thus files:');
     var libFilePaths = libFiles.map(function (file) {
         return file.subpath;
     }).join('\n');
-    console.log(libFilePaths+'\n');
+    console.log(libFilePaths + '\n');
     quit(1);
 }
 // 待检查的文件相对路径
 var lintFiles = files.filter(function (file) {
     return !isLibFiles(file.subpath)
         && !isDistFiles(file.subpath)
-        && ~['a','m','c','r'].indexOf(file.status);
+        && ~['a', 'm', 'c', 'r'].indexOf(file.status);
 }).map(function (file) {
     return file.subpath;
 });
-if(!lintFiles.length){
+if (!lintFiles.length) {
     quit();
 }
 var argv = ['lint'];
 argv = argv.concat(lintFiles);
-argv = argv.concat(['-c','src/.lintrc']);
-var result = spawnSync('xg',argv);
-if (result.stdout.length) {
-    console.log(result.stdout.toString());
-}
-if(result.stderr.length){
-    console.error(result.stderr.toString());
-}
+argv = argv.concat(['-c', 'src/.lintrc']);
+var result = spawnSync('xg', argv, {stdio: 'inherit'});
 quit(result.status);
 
 /**
@@ -57,20 +51,20 @@ function getDiffFiles(type) {
         return t.toLowerCase();
     });
     files.forEach(function (file) {
-        if(!file){
+        if (!file) {
             return;
         }
         var temp = file.split(/[\n\t]/);
         var status = temp[0].toLowerCase();
-        var filepath = root+'/'+temp[1];
+        var filepath = root + '/' + temp[1];
         var extName = path.extname(filepath).slice(1);
 
-        if(types.length && ~types.indexOf(status)){
+        if (types.length && ~types.indexOf(status)) {
             result.push({
-                status:status, // 文件变更状态-AMDRC
-                path:filepath, // 文件绝对路径
-                subpath:temp[1], // 文件相对路径
-                extName:extName // 文件后缀名
+                status: status, // 文件变更状态-AMDRC
+                path: filepath, // 文件绝对路径
+                subpath: temp[1], // 文件相对路径
+                extName: extName // 文件后缀名
             });
         }
     });
@@ -79,13 +73,13 @@ function getDiffFiles(type) {
 /**
  * 是否是lib目录下的文件
  */
-function isLibFiles(subpath){
+function isLibFiles(subpath) {
     return subpath.match(/^src\/lib\/.*/i);
 }
 /**
  * 是否是dist目录下的文件
  */
-function isDistFiles(subpath){
+function isDistFiles(subpath) {
     return subpath.match(/^dist\/.*/i);
 }
 /**
