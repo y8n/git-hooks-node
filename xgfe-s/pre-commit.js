@@ -34,13 +34,7 @@ if(!lintFiles.length){
 var argv = ['lint'];
 argv = argv.concat(lintFiles);
 argv = argv.concat(['-c','src/.lintrc']);
-var result = spawnSync('xg',argv);
-if (result.stdout.length) {
-    console.log(result.stdout.toString());
-}
-if(result.stderr.length){
-    console.error(result.stderr.toString());
-}
+var result = spawnSync('xg',argv, {stdio: 'inherit'});
 quit(result.status);
 
 /**
