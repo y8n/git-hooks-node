@@ -30,9 +30,10 @@ var lintFiles = files.filter(function (file) {
 if (!lintFiles.length) {
     quit();
 }
+
 var argv = ['lint'];
 argv = argv.concat(lintFiles);
-argv = argv.concat(['-c', 'src/.lintrc']);
+argv = argv.concat(['-c', './.lintrc']);
 var result = spawnSync('xg', argv, {stdio: 'inherit'});
 quit(result.status);
 
